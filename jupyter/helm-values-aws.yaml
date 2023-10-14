@@ -1,0 +1,29 @@
+hub:
+  service:
+    type: ClusterIP
+  deploymentStrategy:
+    type: Recreate
+  db:
+    type: sqlite-pvc
+    upgrade:
+    pvc:
+      accessModes:
+        - ReadWriteOnce
+      storage: 2Gi
+      storageClassName: gp2
+singleuser:
+  image:
+    name: jupyter/scipy-notebook
+    tag: latest
+  memory:
+    limit: 3G
+    guarantee: 2G
+  defaultUrl: "/lab"
+  storage:
+    type: dynamic
+    dynamic:
+      storageClass: gp2
+proxy:
+  service:
+    type: ClusterIP
+  secretToken: "8d0648a81650a5afdff078e2012ac0e27a21461894e2b1a44a28ceb2d3928fac" ## <<Change the token to your random hex string from prev step>>
