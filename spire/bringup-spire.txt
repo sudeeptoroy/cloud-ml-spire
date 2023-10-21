@@ -1,0 +1,53 @@
+helm repo add spiffe https://spiffe.github.io/helm-charts/
+helm repo update
+
+helm install spire-aws spiffe/spire --namespace spire --create-namespace -f spire-values.yaml
+helm upgrade spire-aws spiffe/spire --namespace spire --create-namespace -f spire-values.yaml
+
+k -n spire delete statefulset.apps/spire-aws-server
+update the spire server to use empty dir
+k -n spire apply -f  ss.yaml
+k -n spire apply -f  ss_no_controller_manager.yaml
+
+k -n spire apply -f spire-aws-agent-cm.yaml
+
+
+update cm for agent with this:
+        "SVIDStore": [
+          {
+            "aws_secretsmanager": {
+              "plugin_data": {
+                "access_key_id": "ACCESS_KEY_ID",
+                "secret_access_key": "SECRET_ACCESS_KEY",
+                "region": "us-east-1"
+              }
+            }
+          }
+        ]
+
+
+kubectl exec --stdin spire-aws-server-0 -c spire-server -n spire  --  /opt/spire/bin/spire-server entry create -parentID "spiffe://aws.com/ns/spire/sa/spire-aws-agent" -spiffeID "spiffe://aws.com/devup-jupyter" -selector "aws_secretsmanager:secretname:devup-jupyter" -storeSVID true
+
+aws iam create-policy --policy-name devup-SVIDStore-agent  --policy-document file://svid-store-iam-policy.json
+
+eksctl create iamserviceaccount --name spire-aws-agent --namespace spire --cluster devup-cluster --role-name spire-aws-agent-role \
+    --attach-policy-arn arn:aws:iam::008186247089:policy/devup-SVIDStore-agent --approve --override-existing-serviceaccounts
+
+
+# deleting 
+# eksctl delete iamserviceaccount --name svids-spire-agent --namespace spire --cluster devup-cluster
+
+
+
+### 
+how to add entried 
+###
+
+kubectl exec --stdin spire-aws-server-0 -c spire-server -n spire  --  /opt/spire/bin/spire-server entry create -parentID "spiffe://aws.com/spire/agent/k8s_psat/aws-cluster/dd94e337-a23b-4c7b-988f-d03efd254133"     -spiffeID "spiffe://aws.com/ns/spire/sa/spire-aws-agent" -selector "k8s:pod-uid:82b6fbe3-c994-4317-82f7-30f1bc9be69d"
+
+k -n spire  get pod spire-aws-agent-cshhd -oyaml | grep -i uid
+    uid: 82b6fbe3-c994-4317-82f7-30f1bc9be69d
+  uid: 7d39579c-45f5-4fed-acb9-3e931eedaf8e
+
+get the cluster from the server logs
+

@@ -1,0 +1,11 @@
+pip install boto3
+
+copy the file demo-s3.ipynb
+
+1. create policy to access secret manager 2. create iam role and attach it to
+service account 
+eksctl create iamserviceaccount --name default  --namespace jupyter --cluster devup-cluster --role-name default \
+    --attach-policy-arn arn:aws:iam::977803962020:policy/devup-app-jupyter-secret-policy --approve --override-existing-serviceaccounts
+3. restart the admin pod so that it can use the service account to get the aws
+secretsmanager
+

@@ -24,7 +24,13 @@ helm upgrade --cleanup-on-fail \
   --create-namespace \
   --values helm-values-aws.yaml
 
+edit the deployment of hub, remove the pv and add the below
+      - emptyDir: {}
+        name: pvc
+
+
 kubectl get po -n jupyter -w 
+# required only if we have pvc
 kubectl get deploy,po,svc,pvc -n jupyter
 
 kubectl port-forward -n jupyter svc/proxy-public 8080:80 &

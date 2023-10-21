@@ -9,5 +9,5 @@ nodeGroups:
   - name: devup
     instanceType: m5.large
     #    instanceType: m5.xlarge
-    desiredCapacity: 2
+    desiredCapacity: 1
 

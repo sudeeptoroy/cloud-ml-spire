@@ -27,7 +27,7 @@ eksctl create addon --name aws-ebs-csi-driver --cluster devup-cluster --service-
 aws iam create-policy --policy-name my-policy --policy-document file://my-policy.json
 
 eksctl create iamserviceaccount --name hub --namespace jupyter --cluster devup-cluster --role-name hub \
-    --attach-policy-arn arn:aws:iam::008186247089:policy/my-policy --approve --override-existing-serviceaccounts
+    --attach-policy-arn arn:aws:iam::<account number>:policy/my-policy --approve --override-existing-serviceaccounts
 
 shutdown:
 helm uninstall hub -n jupyter

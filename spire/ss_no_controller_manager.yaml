@@ -1,0 +1,111 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  annotations:
+    meta.helm.sh/release-name: spire-aws
+    meta.helm.sh/release-namespace: spire
+  labels:
+    app.kubernetes.io/component: server
+    app.kubernetes.io/instance: spire-aws
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: server
+    app.kubernetes.io/version: 1.7.2
+    helm.sh/chart: spire-server-0.1.0
+  name: spire-aws-server
+  namespace: spire
+spec:
+  podManagementPolicy: OrderedReady
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: server
+      app.kubernetes.io/instance: spire-aws
+      app.kubernetes.io/name: server
+  serviceName: spire-aws-server
+  template:
+    metadata:
+      annotations:
+        checksum/config: 506ee6a7264652e071850afe6408092795ae59a747c73ef0765f1e64304b3d87
+        checksum/config2: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
+        checksum/config3: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
+        checksum/configTornjak: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/component: server
+        app.kubernetes.io/instance: spire-aws
+        app.kubernetes.io/name: server
+    spec:
+      containers:
+      - args:
+        - -expandEnv
+        - -config
+        - /run/spire/config/server.conf
+        env:
+        - name: PATH
+          value: /opt/spire/bin:/bin
+        image: ghcr.io/spiffe/spire-server:1.7.2
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 2
+          httpGet:
+            path: /live
+            port: healthz
+            scheme: HTTP
+          initialDelaySeconds: 15
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 3
+        name: spire-server
+        ports:
+        - containerPort: 8081
+          name: grpc
+          protocol: TCP
+        - containerPort: 8080
+          name: healthz
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /ready
+            port: healthz
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources: {}
+        securityContext: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /tmp/spire-server/private
+          name: spire-server-socket
+        - mountPath: /run/spire/config
+          name: spire-config
+          readOnly: true
+        - mountPath: /run/spire/data
+          name: spire-data1
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: spire-aws-server
+      serviceAccountName: spire-aws-server
+      shareProcessNamespace: true
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: spire-aws-server
+        name: spire-config
+      - emptyDir: {}
+        name: spire-server-socket
+      - emptyDir: {}
+        name: spire-controller-manager-tmp
+      - emptyDir: {}
+        name: spire-data1
+  updateStrategy:
+    rollingUpdate:
+      partition: 0
+    type: RollingUpdate
