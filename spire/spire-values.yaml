@@ -1,6 +1,6 @@
 global:
   spire:
-    trustDomain: aws.com
+    trustDomain: devup.com
     clusterName: aws-cluster
 
     #spire-server:
@@ -11,7 +11,92 @@ global:
 spire-server:
   controllerManager:
     enabled: false
-
+  ca_subject:
+    country: IN
+    organization: devup
+    common_name: devup.com
+  upstreamAuthority:
+    disk:
+      enabled: true
+      secret:
+        data:
+          # This cert is generated using create-cert.sh and should only be used for the test
+          certificate: |
+            -----BEGIN CERTIFICATE-----
+            MIIDkzCCAnugAwIBAgICEAAwDQYJKoZIhvcNAQELBQAwXDESMBAGA1UEAwwJZGV2
+            dXAuY29tMQswCQYDVQQGEwJJTjELMAkGA1UECAwCS0ExCzAJBgNVBAcMAktBMQ8w
+            DQYDVQQKDAZTUElGRkUxDjAMBgNVBAsMBVNQSVJlMB4XDTIzMTAzMDEwNTkxMVoX
+            DTMzMTAyNzEwNTkxMVowVTELMAkGA1UEBhMCSU4xCzAJBgNVBAgMAktBMQ8wDQYD
+            VQQKDAZTUElGRkUxDjAMBgNVBAsMBVNQSVJlMRgwFgYDVQQDDA9henVyZS5kZXZ1
+            cC5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDEQd9l8BBF8B4H
+            gxm9AxnP6w11fmBKEUwFEJGKpSyHHOJmZXNSrqNlS2swjikrs5W2xcBC3pLYaHHP
+            Idl68gGbtjEXn6O1G3Y136zkzmW+IeG4GE1NadpJD2h+2PF1EG/1YNIumtNnrg3/
+            UuOn0wnAtYM0jClw2Y/f4cD1xp5YN6Nf0gWpICcY/nwNhdy8NeqScHq4UuUVWUIs
+            1hnlSGdDxwLJAdEklmv1L7NwLo3RIEnmT+B2ktrpxY9BFOEa376Djd0RZ2pIQSrt
+            8j8fKsSJbqWBMAOkdzg7lPg7pwrebMUVdrEaJXZEz9F1eOBxa0G9mF+CfXem/+CD
+            ipe4QBINAgMBAAGjZjBkMB0GA1UdDgQWBBR/nprAV9F4P62O6YwiHYuCEtiELDAf
+            BgNVHSMEGDAWgBQomVK6BukBVPc6aJLV3NMXBbezdTASBgNVHRMBAf8ECDAGAQH/
+            AgECMA4GA1UdDwEB/wQEAwIBhjANBgkqhkiG9w0BAQsFAAOCAQEAf5jy9IGS/GqM
+            YVKbtZvI4oUFb3i/AJiaLAcH7EZRupBsd7uKHED6DdWWe9/zL4WFczuTUhff5jPk
+            Hk3zjYTpCJu6FNMWrj1YWPMPmI6ormY10UTdO2Ml9wdP1X2tXmJ7WRPllWLlIODU
+            qIqyOUY1oN86kBUzU+EhGjtAu1E/t794bpP/b0bEnrkPox5dbko18zlkQD/UtILn
+            ic5phXvFqgN6x93s6s5s4gpA1YR8G+tsIsYHo6fzGHz2T+hETtXyENDEa4vRmNix
+            oLIkv6GKBieUXI31DCkr5hGeQj2wyV04WngwSm+m+2Giz+uMxXiNALiOJ3NFEdqQ
+            bfLSYetINg==
+            -----END CERTIFICATE-----
+          # This key is generated using create-cert.sh and should only be used for the test
+          key: |
+            -----BEGIN PRIVATE KEY-----
+            MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDEQd9l8BBF8B4H
+            gxm9AxnP6w11fmBKEUwFEJGKpSyHHOJmZXNSrqNlS2swjikrs5W2xcBC3pLYaHHP
+            Idl68gGbtjEXn6O1G3Y136zkzmW+IeG4GE1NadpJD2h+2PF1EG/1YNIumtNnrg3/
+            UuOn0wnAtYM0jClw2Y/f4cD1xp5YN6Nf0gWpICcY/nwNhdy8NeqScHq4UuUVWUIs
+            1hnlSGdDxwLJAdEklmv1L7NwLo3RIEnmT+B2ktrpxY9BFOEa376Djd0RZ2pIQSrt
+            8j8fKsSJbqWBMAOkdzg7lPg7pwrebMUVdrEaJXZEz9F1eOBxa0G9mF+CfXem/+CD
+            ipe4QBINAgMBAAECggEAQVedRZdUE7UKin2/yAqMQYmFBaV58a8onFcT3hF4bdPU
+            HTuR1emHRWaC3bu3QXGdWykkBh+MzLiZi9k9S43fszRJzA++tcHa7bz3F4cQoOku
+            +dg9hJTFtKWIqRMZ8VvzqsL9t76cvFxbFLNIUMwW5y6H7Krt8UC+gk/rqujiN4RZ
+            dLSV7yt7kBVseTCnJN7uH5tLkWKXY9r3wf9lbz6BLV6WMCPhjkmxHSDrjh280blV
+            EtIm2N4JShHIvAzoaINfKZ+qhY3GbbeFyCJgLJk2p6iPrv8OiyTJ1SQFHCM3JPIe
+            uetDuL0rYnYYdeWjjPxg+ScVc3gEoXXbphaMDHeRAQKBgQDmS80dAPqUDC3ykVHt
+            6KFGu4mfspDalinq1Qb+FNwnTZ8GyU72CA58jY3Mhn7xN/7xVzfF+TV/PcSXdKC3
+            IV/mMNRFJE1GoapPtNdvKbt1D0pILmIwJ/y71oPvhEcv9Hf68l+2h4zqXzWJDZ50
+            AN7WdaMtwkTWz6WtUEJgmalfPQKBgQDaKX0ob9CZoBFLCdKY7YIdW13s2QJHPeDh
+            NdeQBwCiv9yS8FQV43lA11j3NWo3MKPe6oWR+8g87o+Bs+PxyI35fZXU34k4rltP
+            DIUalqsDcPP874Qg/OKcYMYzv61YEqESRGLkL/CVqZwIKM1oO2zcCNZIw2Upw5Dc
+            GZX/zR+rEQKBgFCwKlOJLkKE6exdQilrImaX+qY7eEk9573hmauYP3J93cQQ8Ft/
+            gyPcrNwGG6AEkIyalG4G3NmSGLlAIbdIOEN8xELdbz3aEsQOhpTqOEXRb6NOrRRW
+            TlS52kwnOpHww8Dm/uYDJDpR1X4JiYT3cRwO53d244uoAVJyFm+mJxO5AoGABLC5
+            qSHmSTdAx+05IuKQVpM9TLdJrkBtUko3DTipUdZwJpSWKjZOyA8ZMY9rbi5Uh5lh
+            L8dLAcxbN32nm+4k50VE8GOx7o8JFYT+Y5jzqkpGZJy9qXvmX1hRSpGHZ4pW/i6M
+            Nb22HXGdEivWZrRIXd6uxLe2uBQlTCYcrHg7gxECgYBy9l5G+E459RFnbDJ8U4wj
+            tVk7Cp/hacmLcpp14/Rj3hdw0bsafQhBnkjaRLFEADV4jA0CRJr7A96+JnNPchxv
+            aFtBX1vl5xJ/3WTRvfzUraPNy1skVqs5cPXxJRHuXcYk3EpGFf28GHIb9hvRRU+b
+            T/53YoaE3cLgQGTBrNnBqg==
+            -----END PRIVATE KEY-----
+          bundle: |
+            -----BEGIN CERTIFICATE-----
+            MIIDnjCCAoagAwIBAgIJALCzDOKqJAA7MA0GCSqGSIb3DQEBCwUAMFwxEjAQBgNV
+            BAMMCWRldnVwLmNvbTELMAkGA1UEBhMCSU4xCzAJBgNVBAgMAktBMQswCQYDVQQH
+            DAJLQTEPMA0GA1UECgwGU1BJRkZFMQ4wDAYDVQQLDAVTUElSZTAeFw0yMzEwMzAx
+            MDU4NTFaFw00MzEwMjUxMDU4NTFaMFwxEjAQBgNVBAMMCWRldnVwLmNvbTELMAkG
+            A1UEBhMCSU4xCzAJBgNVBAgMAktBMQswCQYDVQQHDAJLQTEPMA0GA1UECgwGU1BJ
+            RkZFMQ4wDAYDVQQLDAVTUElSZTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC
+            ggEBAKsipgyvIsjN6lfc2uSJnBE2kddSqL3VwPi849J4W2g/ExbPbG3IqysXexf/
+            ptrEUm4pgfWDVWz/G69gY+gKAJQtATeUD/o+91qzVBarhwVDyZx1YCTma1dkxo73
+            pH6P0W4kvzmsY1uL3ZSRCn02sv8w0F+n08Va6sAyWE+BmRN1pvVHtWoROZmebL8c
+            kt+pc2LwQhlrRnGzUrLEi+/TmukftStERoGjGgGt/4suWaUy+Khsll/o4zSXPNnr
+            cDZliEtfHeBMN9Apt0vZfi3KDMa3WlyMPve8ufz+43H4+J7QCPMBBnUIKEEKW+cy
+            olLUBTr9p+hHkkLB7iTgnKm720sCAwEAAaNjMGEwHQYDVR0OBBYEFCiZUroG6QFU
+            9zpoktXc0xcFt7N1MB8GA1UdIwQYMBaAFCiZUroG6QFU9zpoktXc0xcFt7N1MA8G
+            A1UdEwEB/wQFMAMBAf8wDgYDVR0PAQH/BAQDAgGGMA0GCSqGSIb3DQEBCwUAA4IB
+            AQBPqscCFBVaR9ukY/KJiWaZRRxEeXGdcYAnVcrMvTDXiBXfhsf0VUQFUkAfUbiW
+            X15HSWNYr1d0TvSIYoS/ewLG0zeewNSK8DX4qy3I9DSRs4dkotHSRkTQItbxvyJG
+            XuHPzIs4CpZnvZtBrsjWylYiCP8uLqsGLTfspKOFwbqibDvgAAlI1XA3BcHQ281L
+            ObJ2WO/VncBm6maxuDlV5sOGyAvhzDhks108RTgSJ+7zZ4wohHMvyU2QdO/crfUL
+            moe0toaBUXo6YEAu/dNn/lYZec5vzKPBGunfemzBm9xtu65tGc22/L+/UUd31LLv
+            WjFTR8c0gJ1tcwudVyo0esQI
+            -----END CERTIFICATE-----
 spire-agent:
   customPlugins:
     svidStore:
@@ -31,3 +116,100 @@ spire-agent:
           #        secret_access_key: SECRET_ACCESS_KEY
           #        region: us-east-1
           #
+          #server:
+          #  config:
+          #    upstreamAuthority:
+          #      disk:
+          #        enabled: true
+          #        secret:
+          #          data:
+          #            # This cert is generated using create-cert.sh and should only be used for the test
+          #            certificate: |
+          #              -----BEGIN CERTIFICATE-----
+          #              MIIFgjCCA2qgAwIBAgICEAAwDQYJKoZIhvcNAQELBQAwTTEQMA4GA1UEAwwHYXdz
+          #              LmNvbTELMAkGA1UEBhMCSU4xCzAJBgNVBAgMAktBMQ8wDQYDVQQKDAZTUElGRkUx
+          #              DjAMBgNVBAsMBVNQSVJFMB4XDTIzMTAyNzIwNDQ1N1oXDTMzMTAyNDIwNDQ1N1ow
+          #              UzELMAkGA1UEBhMCSU4xCzAJBgNVBAgMAktBMQ8wDQYDVQQKDAZTUElGRkUxDjAM
+          #              BgNVBAsMBVNQSVJFMRYwFAYDVQQDDA1henVyZS5hd3MuY29tMIICIjANBgkqhkiG
+          #              9w0BAQEFAAOCAg8AMIICCgKCAgEApTM0wjWvx0oTcAS8xpIyf6PGNsPP3wfEoR+1
+          #              NZNhJD8OIFw8jpyrTdNV0vYyTaX6bJB/kfTLaKGSWYkj5gdKxD0oqawea9ziH1re
+          #              HxWND+JyYzIJP3L+GoOWGMjlF04yvBQx4H1vOZrfnFLemjDYosMgxd4WUO37U3dy
+          #              xuW4elyiSDnZ8fS2kfiKNk4LyvhcQSH9juqvBqtbEdvDSmMFVTVBYRJxrE8BZ5/d
+          #              fT4bs+CCvhcKV889kgvDu7nlEbPNF5afctX8Q3jCz6HO3MoQl5KUl0zRKoRediR4
+          #              Oy6ei23/2rzF4j0wIGtUieTB5RlOEIlKYMXnsLeZ3pvCl6FoMeg+UqNgKgfCIRFt
+          #              XqtcaEplsnMIv3L1rgTZoSn8eRafnPEWG5mGt4QGaPsC7/ST0AbNPdWKxMMWB9ya
+          #              xIytR0FRS6/SALYyrb10Bb55VfxSFQiU+i23v9QEPa25STNjY9xPHLFMFwYuNjXi
+          #              U3/Bn4A6f+ADi+R/tCitBMiRU5c7mA3mkTsRko+AF7/TkQrHA1HZITQ5jJ67V2x+
+          #              ECkCnQinf7pw3bzrfdI+ha8jHTOo5ru3JrmjD8W06VoRW3W9Z/Gf0jIBjENcJ1BI
+          #              buKpVSguQUpnaagP60NX4F/Xxi4hmfHAY3PBsriohyCRkwe4d66i6LfU76xcPebF
+          #              wptfk30CAwEAAaNmMGQwHQYDVR0OBBYEFF+ok8c6N+A25FnS3kmHRIqAfbmbMB8G
+          #              A1UdIwQYMBaAFMV6wJ/UsYjbJ/i0nC0UfYTINvxeMBIGA1UdEwEB/wQIMAYBAf8C
+          #              AQAwDgYDVR0PAQH/BAQDAgGGMA0GCSqGSIb3DQEBCwUAA4ICAQBScxBkYB9zNa/y
+          #              dZKJHuEJ7mpA/I2HNotXhiA1PjFLnpzzZ1j66heOAxNcbZzcqRdJ5EXKCuf/J/wP
+          #              ZVEiQJBCT8LKEngpjz1dZ1wKgZwaeLpWHWgZ7PlNvFVlCFKwamBj2tovgK8owt8L
+          #              a1jbrjyx3Kfk9ArTmH5vd10OSNxvXjFeCriBPUGRAujtxt+joNEytwN1eHW9t0EF
+          #              SlOFk/ca4wvscUnczQuDb3X20cNlzLT8RWsvTXxpbXUrcGQlehmMO2oDcQFr8qKf
+          #              Y6L2ElSJp7gaxgIIoNLj2Rd0v4pqjULkHdnHwQI21kfX3g6zTqZ+Ra4NTAuJnIRw
+          #              I6d7anKE62EDcQHwHSRfg8xvsnu6OwoPEEIXqscB2ysVEePfJE0p3iJBqvHm9/4U
+          #              GpMLTBruFoCanmffrXig0reZvV9cwNEE2OpuiHyUuS6mx+xjO4gqJajlrijpH1JC
+          #              eOwG6RDBakT/3T135MJ3nygHySMVeN/etUiCM1Yc55N8QnpPSL7nu1bMR6o05TV/
+          #              kGATVyRGLi75x3sq2C0p/n3h6TSItxtA9UI6a2KbH9I59LOqXekBovUWSXZ+JCw1
+          #              C/Be/bMt0wyGzislcABvzWlt8+7tMErtC0krR8uIJGlGH2tnQr9RISSzyBzvixHl
+          #              9jc/SbbyNHaiUrlFwL+KsAM3V/wLkQ==
+          #              -----END CERTIFICATE-----
+          #            # This key is generated using create-cert.sh and should only be used for the test
+          #            key: |
+          #              -----BEGIN RSA PRIVATE KEY-----
+          #              Proc-Type: 4,ENCRYPTED
+          #              DEK-Info: AES-256-CBC,A81429F00F1F5DA23B436DCAC710403B
+          #              
+          #              ixn5Cz31Upyjup3QuYeN72DSm6KNwDsUaqkRdFSwiT1YvejW0X2LiRqnUjTc8cqX
+          #              Ia4bHjqsm2UBiE34wjH0YIrXeQwgAFKBaIsdlDwR1cvwlTbiLRtLTMgCPWCb1fcR
+          #              OqwIc2K31IpR7Tcx6SanT9kmD1KAK31l1HVYSyttOP0uD9Gi0LMByB/JfwiV5ln+
+          #              u3T8DIblWE1T3dRi5ZIcwshWSvVs5iWiBsUKBpTRFoZ236gn86Ze21T8zwHZUMjv
+          #              Uis/vJxMPMAse41WN4Dzn41CkCcj0XLSFx+ydWVRhNnNf0VENFwnchKnAUUv8qg7
+          #              pvuD6OxOcHvP+Qpkn4JEtozli1zaMoX7NowwJ/z5FOzW2seho90/S/Rd4otIHgkj
+          #              GlyzX944Ia9s1V6Tl4vUuKXvNiUtVik8w7q9SfxMMQ1B6A5xjvW7DdurzfqxUTBi
+          #              OlUDxHNO/0CYJYK5yZULcySoAKRQQh71cZdzC2tNyMUVuq8QZWGRXu3AnuL0WsWh
+          #              UUnR1ht+AC5oZR7cgGWqwFQgkfAd6py5/CSxxcrAPYAGjMray9tOzuCKSw517+BN
+          #              yzL5sv9C0MpAswDiTqPvlepgpUjOjMqtnqGTTlfM27rpG000EVnAubG1+mI7nNr+
+          #              8bv7uHkTu6o0FC7sGB4UKqVRm7ukYT0gHiQN4s7pC9bgeb+vbDjxyYCUeXf0HBre
+          #              PFLQsOdfFUWRXTHr9LmCLnOxhe72n0W9U6FzojkPVM6QSInItWxV3IJwO7t86ahL
+          #              o7oME4P2u6jwEULO54T9gH9WdDLnQvIGdGXPV8EnVz5+wSWtGRodSm0yuhP6xrFz
+          #              KNhbIlyIZhKyk3YcUokXRZPRbY/7Ying4GOCJHmDLDh6tdJeRBLCWAjtVltH1Obr
+          #              hw9o570x64ePMdiuo/Y/U5O5txU9NedqjipW6tlIuwrb3ZtQqZn1Xpm5fyvcTD8G
+          #              niA4VabAzMsoqYIzj0GVC+xieEOEC35RC56GhMCxWE62rpiQ1zoridl+9fg3cexw
+          #              4/TnUyz6OqS6q+7HxMWfYSTbNmVF57A+PKXNhc2O95zPByXQ8slC4NWOFm/lbF6D
+          #              8h1SH97BCl6TJPVnK6v+nR4gyYXHMW1A9rw7eUWAkske+xTrqeea94C/DyBFjCPk
+          #              agQ6dkrOyaXlB81SveP7hAst/mbu0qpJB5gazHCQpVZiOTa6GKjg5M/MAbWNIpcj
+          #              pGHNhIxM3CNjmuzXjv0vhI7l1eF+90fOwtzzuUUJIQT2qsP7+zJEY7P7YNenf6E9
+          #              XyE/6pWumGVQvpiU6AuaehfN/fYILMAuGh0nvrIr3Os1ptu7aXsmvkHfZTLrk6uK
+          #              Tzuf5Ea0A9QkeKBlOMG/aUwUoDy+G9/fY5x1xPFXYIJTpKby/MTVtR5UZFx5BIcv
+          #              Oa1RlHjLGHLkBU1d7RiJ0yWYLX3Zrj19nZDYGczbmd0Ttpc85h2jk/uXCLUV1UOZ
+          #              BV0eigOH7LuU2ThaWQSxuSzK5AqvAbSuUcTkHVy/k/zynW3eQ4QgeYvWqzo36TuI
+          #              6yAtGZU05MmxMCUY75sU2U8J4PPy9Cxah7USEdMJW89EWy6u0mKJ4Ngj/201rDWn
+          #              yjeFiDGDXWDFIjMYCExVee0JHqTrwbyGSUkhI6i27bPciLhuCAq57M96KVoR79Ad
+          #              b5Iy5W9YCulHNyTV1eprEHeriQ6dzsTb2LCV1G5RTOHpOoDWFmWKAaV15U9A7C15
+          #              VzldcyWHw/LJMnN9a+KfGSk11GUPyhale/o87sQj/VXizmd15suq6GP9UuuDMKzX
+          #              AlNGWd73XairpHSU7snpqGE7u8QC5uN4+LJQg2xTs2xytnA1pA1BHvmyWvh20llC
+          #              xNuEmwBhcDD2xYEUTGL5A1Yt+C0CRImEedxeBbJpzANyGRccPUNB5cxAJgcYev+A
+          #              ytgDNxYFNDJThrW5O+0J9cYczbuCvaD0ytkz47+PkgE9SPajtc8jhRB/dllt5v+d
+          #              ipd54TCChT7TM0trlEPeuMQxCJsuwO7wDmuCU/17LRr+i2/Oe70d23e3Dpz4TvC2
+          #              L1HAfD8h2/wqgLUV2qrIbvkpRUBgNgm6UouYIXoti7NeZ3X5sHSQPG3HjT4Uu2Ew
+          #              W1uZ4sd8u+MncBsb+lKfNE5JnMSLE2tXMHHdcBbd8n+exIKiBjzjzNY4wz8ruRn/
+          #              GPwFC9g37hQS08HqUW6GJ7EwVPUV+uj3pj7SuxFeLvUI6g9S2v+mhE+IatFkjSC1
+          #              PHqhwOa4mlTjsuidQbfRrb2fGbdQB1dr4lBgb/3SIELiHzWtNsoBa1L/FU0I5lOW
+          #              v49MZVXyFZToqxitZ5sNow9wG2dTejzIHXe/Old97H9OGMkbFrsLsSefdKH7SIV0
+          #              aCDVlctVLM1+eW0kxm7ZVk2BRK8Q+r300dRIDM6eN1ZXZeVRnbjd72qfSXe6VHm+
+          #              1mhdN+5GXHZWf365RyLZJV6YFDKt6AfUambKOJlCb1RkfcLJnVzjrkb5ckq//nig
+          #              4UZOIxvDasP+XJIOXQKg9Q6Gcf1bYLixEtqxcKR4i4nqSVM7SXHG0Xu0n5PFyKdm
+          #              DhdCLxZj46BIwn5uENUNXcq6gCkJJMRbXN9NN1jAJ7SrgpSZjGtitAN42zGDcFG8
+          #              1u6JGEp9KEcu0p1h9t4Hc4M94pLdX5iIsFIW/IyhmTDtV7zO+yBdbG69QMxkPKTQ
+          #              D/Gi/wKh+3ANTP/q/33j//4E4aprf38Xv5TwpK3fZ0APmuCaBUqmgvKeera2Kv7b
+          #              x/lO45sY/9a9x0WZ8o95Iygfo530wcgQ7fjzWA5Ysb9kyF/NnmCYuZPPUX01ltUR
+          #              KklsjNM2h7kyJd4OppjK7/Kw+vEGLZniGcA5nS6uOxGjbprCaVUh01mhPqK37CHw
+          #              q7jH3rPtln3wUxJ49rf7QGAmym0rytA82ALViiGH7heEJ2KjjV1H6va6hcF+IaXO
+          #              zUOQg4ViHgYe1AmYcJPrkvuSS8IKNKIw+Pd14Rge7XumemUlhS88tqD27GsT/rVM
+          #              MbXMb4rfjqc+CnevpqpYCfKTTZBBuEQcWXtoOkUVfSMOWSZJToMzN0Tr0D3DMwQ6
+          #              H99Z3FbRGKK9VMY3kjK2jzODAnAO1T+Ki1rlxlZsS9znBRYHlk1CYdrQfa/gqCxb
+          #              -----END RSA PRIVATE KEY-----

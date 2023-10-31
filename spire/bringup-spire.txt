@@ -26,7 +26,6 @@ update cm for agent with this:
         ]
 
 
-kubectl exec --stdin spire-aws-server-0 -c spire-server -n spire  --  /opt/spire/bin/spire-server entry create -parentID "spiffe://aws.com/ns/spire/sa/spire-aws-agent" -spiffeID "spiffe://aws.com/devup-jupyter" -selector "aws_secretsmanager:secretname:devup-jupyter" -storeSVID true
 
 aws iam create-policy --policy-name devup-SVIDStore-agent  --policy-document file://svid-store-iam-policy.json
 
@@ -43,7 +42,9 @@ eksctl create iamserviceaccount --name spire-aws-agent --namespace spire --clust
 how to add entried 
 ###
 
-kubectl exec --stdin spire-aws-server-0 -c spire-server -n spire  --  /opt/spire/bin/spire-server entry create -parentID "spiffe://aws.com/spire/agent/k8s_psat/aws-cluster/dd94e337-a23b-4c7b-988f-d03efd254133"     -spiffeID "spiffe://aws.com/ns/spire/sa/spire-aws-agent" -selector "k8s:pod-uid:82b6fbe3-c994-4317-82f7-30f1bc9be69d"
+kubectl exec --stdin spire-aws-server-0 -c spire-server -n spire  -- /opt/spire/bin/spire-server entry create -parentID "spiffe://devup.com/spire/agent/k8s_psat/aws-cluster/dd94e337-a23b-4c7b-988f-d03efd254133" -spiffeID "spiffe://devup.com/ns/spire/sa/spire-aws-agent" -selector "k8s:pod-uid:1517dca5-6f52-46f9-95a0-304ba0ef77b0"
+
+kubectl exec --stdin spire-aws-server-0 -c spire-server -n spire  -- /opt/spire/bin/spire-server entry create -parentID "spiffe://devup.com/ns/spire/sa/spire-aws-agent" -spiffeID "spiffe://devup.com/devup-jupyter" -selector "aws_secretsmanager:secretname:devup-jupyter" -storeSVID true
 
 k -n spire  get pod spire-aws-agent-cshhd -oyaml | grep -i uid
     uid: 82b6fbe3-c994-4317-82f7-30f1bc9be69d
@@ -51,3 +52,9 @@ k -n spire  get pod spire-aws-agent-cshhd -oyaml | grep -i uid
 
 get the cluster from the server logs
 
+
+# to convert pem to cer
+openssl x509 -in ca-chain.cert.pem -out ca-chain.cert.cer -inform pem -outform der
+
+
+kubectl exec --stdin spire-aws-server-0 -c spire-server -n spire  --  /opt/spire/bin/spire-server entry delete -entryID 6733a947-36d0-4388-b86b-17fd1115c68f
