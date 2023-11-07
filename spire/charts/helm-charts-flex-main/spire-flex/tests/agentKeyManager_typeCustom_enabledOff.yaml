@@ -1,0 +1,47 @@
+suite: test .agent.keyManager.type custom enabled off
+templates:
+  - agent-configmap.yaml
+tests:
+  - it: "Should render the correct agent_config file"
+    template: agent-configmap.yaml
+    set:
+      agent.keyManager.type: custom
+      agent.keyManager.custom.cmd: "/usr/bin/customKeyManager"
+      agent.keyManager.custom.checksum: "3f363c538588bbbbbcbe5374274c2c01f0d1387e012b68a22178e3dd790dc26c"
+      agent.keyManager.custom.enabled: false
+      trustdomain: "dev.mycorp.com"
+    asserts:
+      - containsDocument:
+          apiVersion: "v1"
+          kind: "ConfigMap"
+          name: "RELEASE-NAME-agent-config"
+          namespace: "NAMESPACE"
+      - equal:
+          path: $["data"]["agent.conf"]
+          value: |
+            agent {
+              server_address = "RELEASE-NAME-server"
+              server_port = 8081
+              trust_domain = "dev.mycorp.com"
+            }
+
+            plugins {
+              KeyManager "customKeyManager" {
+                plugin_data {
+                  plugin_cmd = "/usr/bin/customKeyManager"
+                  plugin_checksum = "3f363c538588bbbbbcbe5374274c2c01f0d1387e012b68a22178e3dd790dc26c"
+                  enabled = false
+                  plugin_data {
+                  }
+                }
+              }
+            }
+            
+            health_checks {
+              listener_enabled = true
+              bind_address = "localhost"
+              bind_port = 80
+              live_path = "/live"
+              ready_path = "/ready"
+            }
+

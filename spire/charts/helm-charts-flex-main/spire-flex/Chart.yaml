@@ -1,0 +1,10 @@
+apiVersion: v2
+name: spire-flex
+description: A Helm chart for Kubernetes
+icon: https://github.com/spiffe/helm-charts-flex/blob/main/spire-helm.svg
+
+type: application
+# The Helm Chart version
+version: 0.1.0
+# The SPIRE version
+appVersion: "1.8.0"

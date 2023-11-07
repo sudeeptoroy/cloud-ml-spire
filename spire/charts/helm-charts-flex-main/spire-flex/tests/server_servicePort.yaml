@@ -1,0 +1,62 @@
+suite: test server.servicePort 5000
+set:
+  Release.Name: devcluster
+templates:
+  - agent-configmap.yaml
+  - server-service.yaml
+tests:
+  - it: "Should render with server_address = \"myserver\""
+    template: agent-configmap.yaml
+    set:
+      server.servicePort: 5000
+      trustdomain: "dev.mycorp.com"
+    asserts:
+      - containsDocument:
+          apiVersion: "v1"
+          kind: "ConfigMap"
+          name: "RELEASE-NAME-agent-config"
+          namespace: "NAMESPACE"
+      - equal:
+          path: $["data"]["agent.conf"]
+          value: |
+            agent {
+              server_address = "RELEASE-NAME-server"
+              server_port = 5000
+              trust_domain = "dev.mycorp.com"
+            }
+            
+            plugins {
+              KeyManager "disk" {
+                plugin_data {
+                  directory = "/opt/spire/data/agent/"
+                }
+              }
+            }
+            
+            health_checks {
+              listener_enabled = true
+              bind_address = "localhost"
+              bind_port = 80
+              live_path = "/live"
+              ready_path = "/ready"
+            }
+
+  - it: "Should render with name = \"myserver\""
+    template: server-service.yaml
+    set:
+      server.servicePort: 5000
+      trustdomain: "dev.mycorp.com"
+    asserts:
+      - containsDocument:
+          apiVersion: "v1"
+          kind: "Service"
+          name: "RELEASE-NAME-server"
+          namespace: "NAMESPACE"
+      - equal:
+          path: "metadata.name"
+          value: "RELEASE-NAME-server"
+      - isNotNull:
+          path: "spec.ports[?(@.port == 5000)]"
+      - equal:
+          path: "spec.ports[?(@.port == 5000)].protocol"
+          value: "TCP"

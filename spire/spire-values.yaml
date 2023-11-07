@@ -9,6 +9,10 @@ global:
     #
 
 spire-server:
+  image:
+    registry: docker.io
+    repository: sudeepto/spire-sudi
+    tag: v6
   controllerManager:
     enabled: false
   ca_subject:

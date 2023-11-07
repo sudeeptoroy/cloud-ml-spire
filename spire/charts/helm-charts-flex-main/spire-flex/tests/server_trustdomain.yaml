@@ -1,0 +1,39 @@
+suite: test .trustdomain prod.yoyodyne.com
+templates:
+  - agent-configmap.yaml
+tests:
+  - it: ".trustdomain set to prod.yoyodyne.com sets trust_domain = \"prod.yoyodyne.com\""
+    template: agent-configmap.yaml
+    set:
+      trustdomain: "prod.yoyodyne.com"
+    asserts:
+      - containsDocument:
+          apiVersion: "v1"
+          kind: "ConfigMap"
+          name: "RELEASE-NAME-agent-config"
+          namespace: "NAMESPACE"
+      - equal:
+          path: $["data"]["agent.conf"]
+          value: |
+            agent {
+              server_address = "RELEASE-NAME-server"
+              server_port = 8081
+              trust_domain = "prod.yoyodyne.com"
+            }
+            
+            plugins {
+              KeyManager "disk" {
+                plugin_data {
+                  directory = "/opt/spire/data/agent/"
+                }
+              }
+            }
+            
+            health_checks {
+              listener_enabled = true
+              bind_address = "localhost"
+              bind_port = 80
+              live_path = "/live"
+              ready_path = "/ready"
+            }
+

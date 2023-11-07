@@ -1,0 +1,12 @@
+suite: test .trustdomain (unset)
+set:
+  Release.Name: devcluster
+templates:
+  - agent-configmap.yaml
+tests:
+  - it: "Should fail to render as the trustdomain is not set"
+    template: agent-configmap.yaml
+    asserts:
+      - failedTemplate:
+          errorMessage: |-
+            The trustdomain must be set

@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $.Release.Name }}-agent-config
+  namespace: {{ $.Release.Namespace }}
+data:
+  {{ if (.Values.agent).configFile }}
+  {{ base .Values.agent.configFile -}}: |
+  {{ else }}
+  agent.conf: |
+  {{ end }}
+    agent {
+      server_address = {{ default (printf "%s-server" .Release.Name) (.Values.server).serviceName | quote }}
+      server_port = {{ default 8081 (.Values.server).servicePort }}
+      trust_domain = {{ required "The trustdomain must be set" .Values.trustdomain | quote }}
+    }
+    
+    plugins {
+      {{- if eq (default "disk" ((.Values.agent).keyManager).type) "disk" }}
+      KeyManager "disk" {
+        plugin_data {
+          directory = {{ default "/opt/spire/data/agent/" (((.Values.agent).keyManager).disk).directory | quote }}
+        }
+      }
+      {{- end }}
+      {{- if eq ((.Values.agent).keyManager).type "memory" }}
+      KeyManager "memory" {
+      }
+      {{- end }}
+      {{- if eq ((.Values.agent).keyManager).type "custom" }}
+      KeyManager {{ default "customKeyManager" (((.Values.agent).keyManager).custom).name | quote }} {
+        plugin_data {
+          plugin_cmd = {{ required "agent.keyManager.custom.cmd must be set" (((.Values.agent).keyManager).custom).cmd | quote }}
+          plugin_checksum = {{ required "agent.keyManager.custom.checksum must be set" (((.Values.agent).keyManager).custom).checksum | quote }}
+          enabled = {{ ne (((.Values.agent).keyManager).custom).enabled false }}
+          plugin_data {
+            {{- range (((.Values.agent).keyManager).custom).data }}
+            {{ . }}
+            {{- end }}
+          }
+        }
+      }
+      {{- end }}
+    }
+    {{ if ne (((.Values.agent).healthCheck).enable) false }}
+    health_checks {
+      listener_enabled = true
+      bind_address = {{ default "localhost" (((.Values.agent).healthCheck).bindAddress) | quote }}
+      bind_port = {{ default 80 (((.Values.agent).healthCheck).bindPort) }}
+      live_path = {{ default "/live" (((.Values.agent).healthCheck).livePath) | quote }}
+      ready_path = {{ default "/ready" (((.Values.agent).healthCheck).readyPath) | quote }}
+    }
+    {{- end }}

@@ -1,0 +1,14 @@
+suite: test .agent.keyManager.type custom missing checksum
+templates:
+  - agent-configmap.yaml
+tests:
+  - it: "Should render the correct agent_config file"
+    template: agent-configmap.yaml
+    set:
+      agent.keyManager.type: custom
+      agent.keyManager.custom.cmd: "/usr/bin/customKeyManager"
+      trustdomain: "dev.mycorp.com"
+    asserts:
+      - failedTemplate:
+          errorMessage: "agent.keyManager.custom.checksum must be set"
+

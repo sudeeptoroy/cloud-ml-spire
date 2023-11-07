@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ $.Release.Name }}-agent-daemonset
+  namespace: {{ $.Release.Namespace }}
+spec:
+  selector:
+    matchLabels:
+      name: {{ $.Release.Name }}-agent
+  template:
+    metadata:
+      labels:
+        name:  {{ $.Release.Name }}-agent
+    spec:
+      containers:
+        - name: {{ $.Release.Name }}-agent
+          image: {{ include "spire-flex.agent.image" . }}
+          args:
+            - "-config"
+            - {{ default "/opt/spire/conf/agent/agent.conf" (.Values.agent).configFile | quote }} 
+          volumeMounts:
+            - name: {{ $.Release.Name }}-agent-config
+              mountPath: {{ printf "%s/" (dir (default "/opt/spire/conf/agent/agent.conf" ($.Values.agent).configFile)) | quote }}
+              readOnly: true
+          {{- if eq (default "disk" ((.Values.agent).keyManager).type) "disk" }}
+            - name: {{ $.Release.Name }}-agent-keymanager
+              mountPath: {{ default "/opt/spire/data/agent" (((.Values.agent).keyManager).disk).directory | quote }}
+              readOnly: false
+          {{- end }}
+          {{- if ne (((.Values.agent).healthCheck).enable) false }}
+          livenessProbe:
+            httpGet:
+              host: {{ default "localhost" (((.Values.agent).healthCheck).bindAddress) | quote }}
+              port: {{ default 80 (((.Values.agent).healthCheck).bindPort) }}
+              path: {{ default "/live" (((.Values.agent).healthCheck).livePath) | quote }}
+          readinessProbe:
+            httpGet:
+              host: {{ default "localhost" (((.Values.agent).healthCheck).bindAddress) | quote }}
+              port: {{ default 80 (((.Values.agent).healthCheck).bindPort) }}
+              path: {{ default "/ready" (((.Values.agent).healthCheck).readyPath) | quote }}
+          startupProbe:
+            httpGet:
+              host: {{ default "localhost" (((.Values.agent).healthCheck).bindAddress) | quote }}
+              port: {{ default 80 (((.Values.agent).healthCheck).bindPort) }}
+              path: {{ default "/ready" (((.Values.agent).healthCheck).readyPath) | quote }}
+          {{- end }}
+      volumes:
+        - name: {{ $.Release.Name }}-agent-config
+          configMap:
+            name: {{ $.Release.Name }}-agent-config
+        {{- if eq (default "disk" ((.Values.agent).keyManager).type) "disk" }}
+        - name: {{ $.Release.Name }}-agent-keymanager
+          hostPath:
+            path: {{ coalesce ((.Values.agent).hostPath).keyManagerDir (default "/opt/spire/data/agent" (((.Values.agent).keyManager).disk).directory) | quote }}
+            type: "DirectoryOrCreate"
+        {{- end }}

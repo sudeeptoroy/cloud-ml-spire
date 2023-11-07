@@ -1,0 +1,37 @@
+suite: test .agent.keyManager.type memory
+templates:
+  - agent-configmap.yaml
+tests:
+  - it: "Should render the correct agent_config file"
+    template: agent-configmap.yaml
+    set:
+      agent.keyManager.type: "memory"
+      trustdomain: "dev.mycorp.com"
+    asserts:
+      - containsDocument:
+          apiVersion: "v1"
+          kind: "ConfigMap"
+          name: "RELEASE-NAME-agent-config"
+          namespace: "NAMESPACE"
+      - equal:
+          path: $["data"]["agent.conf"]
+          value: |
+            agent {
+              server_address = "RELEASE-NAME-server"
+              server_port = 8081
+              trust_domain = "dev.mycorp.com"
+            }
+
+            plugins {
+              KeyManager "memory" {
+              }
+            }
+            
+            health_checks {
+              listener_enabled = true
+              bind_address = "localhost"
+              bind_port = 80
+              live_path = "/live"
+              ready_path = "/ready"
+            }
+

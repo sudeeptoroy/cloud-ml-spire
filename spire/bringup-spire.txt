@@ -26,6 +26,19 @@ update cm for agent with this:
         ]
 
 
+        "CredentialComposer": [
+          {
+            "sudi-credential-composer": {
+              "plugin_cmd": "/opt/spire/bin/x509credentialcomposer",
+              "plugin_checksum": "b152f343fa77ca7a139696e6efd81d33da56edb877d380674a6011fdaff946a6",
+              "plugin_data": {
+                "my_spiffe_id_user_prefixes": {
+                }
+              }
+            }
+          }
+        ]
+
 
 aws iam create-policy --policy-name devup-SVIDStore-agent  --policy-document file://svid-store-iam-policy.json
 
@@ -58,3 +71,12 @@ openssl x509 -in ca-chain.cert.pem -out ca-chain.cert.cer -inform pem -outform d
 
 
 kubectl exec --stdin spire-aws-server-0 -c spire-server -n spire  --  /opt/spire/bin/spire-server entry delete -entryID 6733a947-36d0-4388-b86b-17fd1115c68f
+
+
+        "CredentialComposer": [
+          {
+            "sudi-credential-composer": {
+              "plugin_cmd": "/opt/spire/bin/protoc-gen-go-spire"
+            }
+          }
+        ]
